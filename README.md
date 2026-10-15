@@ -6,7 +6,7 @@ para las fechas elegidas y avisa por Telegram. Dashboard en GitHub Pages para el
 ## Cómo funciona
 - `checker.py` replica la búsqueda de alsa.es (origen 90593 = Burgos, destino 90305 = Valladolid).
   Cada servicio aparece como `V` (a la venta), `F` (completo) o desaparece de la lista.
-- `.github/workflows/check.yml` se ejecuta cada 10 min y hace 4 rondas separadas 2 min.
+- `.github/workflows/check.yml` corre en modo vigilante: una ejecución de ~5h40 que comprueba cada 2 min y se relanza sola; un cron cada 30 min hace de respaldo.
 - Estado e historial de cambios en `data/state.json`; fechas y franja horaria en `config.json`.
 - `docs/index.html` es el dashboard (GitHub Pages).
 

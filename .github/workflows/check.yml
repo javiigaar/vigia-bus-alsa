@@ -1,7 +1,8 @@
 name: Vigilar buses
 
 # Una ejecución larga (modo vigilante) comprueba cada 2 min durante ~5h40 y al acabar se relanza sola.
-# El cron es solo un respaldo por si la cadena se rompe: si ya hay un vigilante activo, no hace nada.
+# El cron es solo un respaldo por si la cadena se rompe. No hace falta comprobar si ya hay uno activo:
+# el grupo de concurrencia deja como mucho una ejecución en cola (la más nueva) y la lanza al terminar la actual.
 on:
   schedule:
     - cron: "*/30 * * * *"
@@ -30,23 +31,13 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       MODE: ${{ github.event.inputs.mode || 'vigilante' }}
     steps:
-      - name: ¿Ya hay un vigilante activo?
-        id: guard
-        run: |
-          n=$(gh run list -R "$GITHUB_REPOSITORY" -w check.yml -s in_progress --json databaseId \
-              -q "[.[] | select(.databaseId != ${GITHUB_RUN_ID})] | length")
-          echo "busy=$([ "$n" -gt 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
-        if: steps.guard.outputs.busy == 'false'
       - uses: actions/setup-python@v5
-        if: steps.guard.outputs.busy == 'false'
         with:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-        if: steps.guard.outputs.busy == 'false'
       - name: Comprobar ALSA
-        if: steps.guard.outputs.busy == 'false'
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -58,5 +49,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python checker.py
       - name: Relanzar el vigilante
-        if: always() && steps.guard.outputs.busy == 'false' && env.MODE == 'vigilante' && github.event.inputs.test_telegram != 'true'
+        if: always() && env.MODE == 'vigilante' && github.event.inputs.test_telegram != 'true'
         run: gh workflow run check.yml -R "$GITHUB_REPOSITORY" --ref main -f mode=vigilante
