@@ -43,8 +43,8 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
 
 /* calendario */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.cal-head strong{font-size:17px;text-transform:capitalize}
-.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-head strong{font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;max-width:440px;margin:0 auto}
 .wd{font-size:11px;text-align:center;color:var(--muted);padding:4px 0;text-transform:uppercase}
 .day{aspect-ratio:1/1;border-radius:10px;border:1px solid transparent;background:none;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:15px;position:relative}
 .day:hover:not(:disabled){border-color:var(--line)}
@@ -62,7 +62,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
 .date-item{border-top:1px solid var(--line);padding:14px 0}
 .date-item:first-of-type{border-top:0;padding-top:0}
 .date-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.date-title{font-weight:650;font-size:16px;text-transform:capitalize}
+.date-title{font-weight:650;font-size:16px}
 .pill{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
 .pill.V{background:var(--ok-soft);color:var(--ok)} .pill.F{background:var(--full-soft);color:var(--full)} .pill.absent,.pill.unknown{background:var(--none-soft);color:var(--muted)}
 .services{display:flex;flex-direction:column;gap:6px;margin-top:10px}
@@ -164,7 +164,8 @@ function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('sh
 const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const parseIso = s => { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
 const todayIso = iso(new Date());
-function fmtDate(s){ const d=parseIso(s); return d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}); }
+const cap = t => t.charAt(0).toUpperCase()+t.slice(1);
+function fmtDate(s){ const d=parseIso(s); return cap(d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'})); }
 function fmtTs(s){ const d=new Date(s); return d.toLocaleString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
 function fmtDur(ms){ const m=Math.round(ms/60000); if(m<60) return `${m} min`; const h=Math.floor(m/60); return `${h} h ${m%60} min`; }
 function ago(s){ const m=Math.round((Date.now()-new Date(s))/60000); if(m<1) return 'hace un momento'; if(m<60) return `hace ${m} min`; const h=Math.round(m/60); return h<24?`hace ${h} h`:`hace ${Math.round(h/24)} d`; }
@@ -215,7 +216,7 @@ function dayStatus(dIso){
 function renderCal(){
   const cal=$('#cal'); cal.innerHTML='';
   WD.forEach(w=>{ const e=document.createElement('div'); e.className='wd'; e.textContent=w; cal.appendChild(e); });
-  $('#monthLabel').textContent = viewMonth.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+  $('#monthLabel').textContent = cap(viewMonth.toLocaleDateString('es-ES',{month:'long',year:'numeric'}));
   const first = (viewMonth.getDay()+6)%7;
   for (let i=0;i<first;i++) cal.appendChild(document.createElement('div'));
   const days = new Date(viewMonth.getFullYear(), viewMonth.getMonth()+1, 0).getDate();
