@@ -1,13 +1,15 @@
 name: Vigilar buses
 
+# Una ejecución larga (modo vigilante) comprueba cada 2 min durante ~5h40 y al acabar se relanza sola.
+# El cron es solo un respaldo por si la cadena se rompe: si ya hay un vigilante activo, no hace nada.
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
-      rounds:
-        description: "Rondas de comprobación"
-        default: "1"
+      mode:
+        description: "vigilante = bucle largo, una = una sola comprobación"
+        default: "vigilante"
       test_telegram:
         description: "Enviar solo un mensaje de prueba a Telegram"
         type: boolean
@@ -15,30 +17,46 @@ on:
 
 permissions:
   contents: write
-
-concurrency:
-  group: vigilar
-  cancel-in-progress: false
+  actions: write
 
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 355
+    concurrency:
+      group: vigilar
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      MODE: ${{ github.event.inputs.mode || 'vigilante' }}
     steps:
+      - name: ¿Ya hay un vigilante activo?
+        id: guard
+        run: |
+          n=$(gh run list -R "$GITHUB_REPOSITORY" -w check.yml -s in_progress --json databaseId \
+              -q "[.[] | select(.databaseId != ${GITHUB_RUN_ID})] | length")
+          echo "busy=$([ "$n" -gt 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
+        if: steps.guard.outputs.busy == 'false'
       - uses: actions/setup-python@v5
+        if: steps.guard.outputs.busy == 'false'
         with:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+        if: steps.guard.outputs.busy == 'false'
       - name: Comprobar ALSA
+        if: steps.guard.outputs.busy == 'false'
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          ROUNDS: ${{ github.event.inputs.rounds || '4' }}
-          ROUND_GAP: "120"
           TEST_TELEGRAM: ${{ github.event.inputs.test_telegram || 'false' }}
+          MAX_MINUTES: ${{ env.MODE == 'vigilante' && '340' || '0' }}
+          ROUND_GAP: "120"
         run: |
           git config user.name "vigia-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python checker.py
+      - name: Relanzar el vigilante
+        if: always() && steps.guard.outputs.busy == 'false' && env.MODE == 'vigilante' && github.event.inputs.test_telegram != 'true'
+        run: gh workflow run check.yml -R "$GITHUB_REPOSITORY" --ref main -f mode=vigilante

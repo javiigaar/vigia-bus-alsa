@@ -184,6 +184,7 @@ def check_once(alsa, config, state):
 
         if not ds.get("initialized"):
             ds["initialized"] = True
+            ds["firstCheck"] = ts
             changed = True
             win = [j for j in journeys if in_window(j["time"], window)]
             libres = [j for j in win if j["state"] == "V"]
@@ -222,12 +223,16 @@ def main():
         telegram("✅ <b>Vigía bus conectado</b>\n"
                  "Te avisaré aquí cuando se libere el de las 18:00 Burgos → Valladolid.")
         return
+    # MAX_MINUTES > 0: modo vigilante, repite rondas hasta agotar ese tiempo
+    max_minutes = float(os.environ.get("MAX_MINUTES", "0"))
     rounds = int(os.environ.get("ROUNDS", "1"))
     gap = int(os.environ.get("ROUND_GAP", "120"))
     in_ci = os.environ.get("GITHUB_ACTIONS") == "true"
+    deadline = time.monotonic() + max_minutes * 60
     alsa = Alsa()
 
-    for i in range(rounds):
+    i = 0
+    while True:
         if in_ci and i > 0:
             git("pull", "--rebase", "-q")  # coger fechas nuevas añadidas desde el dashboard
         config = load_json(CONFIG, {})
@@ -237,9 +242,11 @@ def main():
             save_json(STATE, state)
             if in_ci:
                 commit_state()
-        if i < rounds - 1:
-            time.sleep(gap)
-
+        i += 1
+        more = time.monotonic() + gap < deadline if max_minutes else i < rounds
+        if not more:
+            break
+        time.sleep(gap)
 
 if __name__ == "__main__":
     sys.exit(main())
