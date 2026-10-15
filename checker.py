@@ -218,6 +218,10 @@ def commit_state():
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
+    if os.environ.get("TEST_TELEGRAM") == "true":
+        telegram("✅ <b>Vigía bus conectado</b>
+Te avisaré aquí cuando se libere el de las 18:00 Burgos → Valladolid.")
+        return
     rounds = int(os.environ.get("ROUNDS", "1"))
     gap = int(os.environ.get("ROUND_GAP", "120"))
     in_ci = os.environ.get("GITHUB_ACTIONS") == "true"

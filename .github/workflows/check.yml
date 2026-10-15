@@ -8,6 +8,10 @@ on:
       rounds:
         description: "Rondas de comprobación"
         default: "1"
+      test_telegram:
+        description: "Enviar solo un mensaje de prueba a Telegram"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -33,6 +37,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           ROUNDS: ${{ github.event.inputs.rounds || '4' }}
           ROUND_GAP: "120"
+          TEST_TELEGRAM: ${{ github.event.inputs.test_telegram || 'false' }}
         run: |
           git config user.name "vigia-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
