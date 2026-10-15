@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vigía Bus 18:00</title>
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚌</text></svg>">
+<style>
+:root{
+  --bg:#f6f7f5; --card:#ffffff; --ink:#17201d; --muted:#66716d; --line:#e3e7e4;
+  --accent:#0f766e; --accent-ink:#ffffff; --accent-soft:#e1f2ef;
+  --ok:#15803d; --ok-soft:#dcfce7; --full:#b91c1c; --full-soft:#fee2e2; --none:#94a3b8; --none-soft:#eef1f4;
+  --sel:#0f766e; --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1311; --card:#161d1a; --ink:#e7ecea; --muted:#93a19c; --line:#26302c;
+    --accent:#2dd4bf; --accent-ink:#06201c; --accent-soft:#123430;
+    --ok:#4ade80; --ok-soft:#12301e; --full:#f87171; --full-soft:#3a1717; --none:#64748b; --none-soft:#1d2428;
+    --sel:#2dd4bf;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+main{max-width:720px;margin:0 auto;padding:16px 16px 64px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 16px}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+h1 small{display:block;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0}
+h2{font-size:15px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:16px}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 14px;cursor:pointer;touch-action:manipulation}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+button:disabled{opacity:.5;cursor:default}
+.icon-btn{padding:8px 10px;line-height:1}
+input{font:inherit;font-size:16px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 12px;width:100%}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.status-line{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.dot.V{background:var(--ok)} .dot.F{background:var(--full)} .dot.absent,.dot.unknown{background:var(--none)}
+
+/* calendario */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head strong{font-size:17px;text-transform:capitalize}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wd{font-size:11px;text-align:center;color:var(--muted);padding:4px 0;text-transform:uppercase}
+.day{aspect-ratio:1/1;border-radius:10px;border:1px solid transparent;background:none;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:15px;position:relative}
+.day:hover:not(:disabled){border-color:var(--line)}
+.day.weekend-fri{font-weight:600}
+.day.today{border-color:var(--muted)}
+.day.sel{background:var(--accent-soft);border-color:var(--sel)}
+.day:disabled{color:var(--line);background:none}
+.day .dot{width:7px;height:7px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+.legend span{display:flex;align-items:center;gap:5px}
+.save-bar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap}
+.pending{font-size:13px;color:var(--accent)}
+
+/* fechas */
+.date-item{border-top:1px solid var(--line);padding:14px 0}
+.date-item:first-of-type{border-top:0;padding-top:0}
+.date-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.date-title{font-weight:650;font-size:16px;text-transform:capitalize}
+.pill{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.pill.V{background:var(--ok-soft);color:var(--ok)} .pill.F{background:var(--full-soft);color:var(--full)} .pill.absent,.pill.unknown{background:var(--none-soft);color:var(--muted)}
+.services{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.svc{display:flex;align-items:center;gap:10px;font-size:14px}
+.svc .t{font-variant-numeric:tabular-nums;font-weight:600;width:96px}
+.svc .s{color:var(--muted)}
+.svc .tag{font-size:11px;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:0 5px}
+.hist{margin-top:10px;font-size:13px;color:var(--muted)}
+.hist ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.hist li{display:flex;gap:8px;align-items:baseline}
+.hist li b{color:var(--ink);font-weight:600}
+.missed{color:var(--full)}
+details summary{cursor:pointer;color:var(--muted);font-size:13px;margin-top:8px}
+.empty{color:var(--muted);text-align:center;padding:12px 0}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1}
+.hint{font-size:13px;color:var(--muted);margin:8px 0 0}
+.hint a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>🚌 Vigía Burgos → Valladolid<small id="sub">Bus de las 18:00 · cargando…</small></h1>
+    <button class="icon-btn" id="btnSettings" title="Ajustes" aria-label="Ajustes">⚙️</button>
+  </header>
+
+  <section class="card" id="settings" hidden>
+    <h2>Ajustes</h2>
+    <label for="tok">Token de GitHub (solo se guarda en este navegador)</label>
+    <input id="tok" type="password" autocomplete="off" placeholder="github_pat_…">
+    <p class="hint">Necesario para guardar fechas y lanzar comprobaciones. Fine-grained token con permisos <b>Contents</b> y <b>Actions</b> de lectura/escritura sobre este repo.</p>
+    <div class="row" style="margin-top:12px">
+      <div style="flex:1;min-width:120px"><label for="w0">Vigilar desde</label><input id="w0" type="time"></div>
+      <div style="flex:1;min-width:120px"><label for="w1">hasta</label><input id="w1" type="time"></div>
+    </div>
+    <p class="hint">Avisa de cualquier bus que salga en esa franja (incluye refuerzos).</p>
+    <div class="row" style="margin-top:12px;justify-content:flex-end">
+      <button id="btnSaveSettings" class="primary">Guardar ajustes</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="status-line" id="runStatus">Comprobando estado…</div>
+    <div class="row" style="margin-top:10px">
+      <button id="btnCheck">🔄 Comprobar ahora</button>
+      <button id="btnReload">Recargar datos</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="cal-head">
+      <button class="icon-btn" id="prev" aria-label="Mes anterior">‹</button>
+      <strong id="monthLabel"></strong>
+      <button class="icon-btn" id="next" aria-label="Mes siguiente">›</button>
+    </div>
+    <div class="grid" id="cal"></div>
+    <div class="legend">
+      <span><i class="dot V"></i>Plaza libre</span>
+      <span><i class="dot F"></i>Completo</span>
+      <span><i class="dot absent"></i>Sin datos / no aparece</span>
+    </div>
+    <div class="save-bar">
+      <span class="pending" id="pending"></span>
+      <button class="primary" id="btnSave" disabled>Guardar fechas</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Fechas vigiladas</h2>
+    <div id="list"></div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const WD = ['lun','mar','mié','jue','vie','sáb','dom'];
+const LABEL = {V:'Plaza libre', F:'Completo', absent:'No aparece', unknown:'Sin comprobar'};
+
+// --- Repo: owner.github.io/repo  (se puede forzar con ?repo=owner/name)
+function repoFromLocation(){
+  const q = new URLSearchParams(location.search).get('repo');
+  if (q) { try{localStorage.setItem('repo', q)}catch{}; return q; }
+  try{ const r = localStorage.getItem('repo'); if (r) return r; }catch{}
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/);
+  const name = location.pathname.split('/').filter(Boolean)[0];
+  return m && name ? `${m[1]}/${name}` : null;
+}
+const REPO = repoFromLocation();
+const API = `https://api.github.com/repos/${REPO}`;
+const getTok = () => { try{return localStorage.getItem('ghtok')||''}catch{return ''} };
+
+let config = null, configSha = null, state = {dates:{}};
+let selected = new Set();
+let viewMonth = (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); })();
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2600); }
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseIso = s => { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
+const todayIso = iso(new Date());
+function fmtDate(s){ const d=parseIso(s); return d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}); }
+function fmtTs(s){ const d=new Date(s); return d.toLocaleString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
+function fmtDur(ms){ const m=Math.round(ms/60000); if(m<60) return `${m} min`; const h=Math.floor(m/60); return `${h} h ${m%60} min`; }
+function ago(s){ const m=Math.round((Date.now()-new Date(s))/60000); if(m<1) return 'hace un momento'; if(m<60) return `hace ${m} min`; const h=Math.round(m/60); return h<24?`hace ${h} h`:`hace ${Math.round(h/24)} d`; }
+
+function b64decode(b){ const bin=atob(b.replace(/\n/g,'')); return new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0))); }
+function b64encode(s){ const bytes=new TextEncoder().encode(s); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); }
+
+async function gh(path, opts={}){
+  const headers = {'Accept':'application/vnd.github+json', ...(opts.headers||{})};
+  const tok = getTok(); if (tok) headers.Authorization = `Bearer ${tok}`;
+  const r = await fetch(API+path, {...opts, headers, cache:'no-store'});
+  if (!r.ok && r.status !== 204) throw new Error(`GitHub ${r.status}: ${(await r.text()).slice(0,160)}`);
+  return r.status === 204 ? null : r.json();
+}
+async function readFile(path){
+  if (!getTok()){ // sin token: raw (sin límite de API, puede ir ~5 min retrasado)
+    const r = await fetch(`https://raw.githubusercontent.com/${REPO}/main/${path}?t=${Date.now()}`);
+    if (!r.ok) throw new Error(`raw ${r.status}`);
+    return {data: await r.json(), sha: null};
+  }
+  const j = await gh(`/contents/${path}?ref=main&t=${Date.now()}`);
+  return {data: JSON.parse(b64decode(j.content)), sha: j.sha};
+}
+
+async function load(){
+  if (!REPO){ $('#sub').textContent='Abre esta página desde GitHub Pages (o añade ?repo=usuario/repo)'; return; }
+  try{
+    const c = await readFile('config.json'); config=c.data; configSha=c.sha;
+    try{ state = (await readFile('data/state.json')).data; }catch{ state={dates:{}}; }
+  }catch(e){ toast('No pude leer los datos: '+e.message); return; }
+  selected = new Set(config.dates||[]);
+  const w = config.window||['17:45','18:45'];
+  $('#w0').value=w[0]; $('#w1').value=w[1];
+  $('#sub').textContent = `Salidas entre ${w[0]} y ${w[1]} · ${selected.size} fecha${selected.size===1?'':'s'}`;
+  renderCal(); renderList(); updatePending(); loadRunStatus();
+}
+
+// --- Estado de una fecha: el mejor de los servicios dentro de la franja
+function inWindow(t){ const w=config?.window||['17:45','18:45']; return t>=w[0] && t<=w[1]; }
+function dayStatus(dIso){
+  const ds = state.dates?.[dIso]; if (!ds) return 'unknown';
+  const svcs = Object.values(ds.services||{}).filter(s=>inWindow(s.time));
+  if (svcs.some(s=>s.state==='V')) return 'V';
+  if (svcs.some(s=>s.state==='F')) return 'F';
+  return ds.lastCheck ? 'absent' : 'unknown';
+}
+
+function renderCal(){
+  const cal=$('#cal'); cal.innerHTML='';
+  WD.forEach(w=>{ const e=document.createElement('div'); e.className='wd'; e.textContent=w; cal.appendChild(e); });
+  $('#monthLabel').textContent = viewMonth.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+  const first = (viewMonth.getDay()+6)%7;
+  for (let i=0;i<first;i++) cal.appendChild(document.createElement('div'));
+  const days = new Date(viewMonth.getFullYear(), viewMonth.getMonth()+1, 0).getDate();
+  for (let n=1;n<=days;n++){
+    const d = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), n), k=iso(d);
+    const b=document.createElement('button'); b.className='day';
+    if (d.getDay()===5||d.getDay()===0) b.classList.add('weekend-fri');
+    if (k===todayIso) b.classList.add('today');
+    if (selected.has(k)) b.classList.add('sel');
+    b.disabled = k < todayIso;
+    b.setAttribute('aria-pressed', selected.has(k));
+    b.setAttribute('aria-label', fmtDate(k));
+    b.innerHTML = `<span>${n}</span>`;
+    if (selected.has(k)){ const st=dayStatus(k); b.innerHTML += `<i class="dot ${st}"></i>`; }
+    b.onclick = () => { selected.has(k)?selected.delete(k):selected.add(k); renderCal(); updatePending(); };
+    cal.appendChild(b);
+  }
+}
+
+function updatePending(){
+  const orig = new Set((config?.dates||[]).filter(d=>d>=todayIso));
+  const cur = new Set([...selected].filter(d=>d>=todayIso));
+  const add=[...cur].filter(d=>!orig.has(d)).length, rem=[...orig].filter(d=>!cur.has(d)).length;
+  const dirty = add||rem;
+  $('#btnSave').disabled = !dirty;
+  $('#pending').textContent = dirty ? [add&&`+${add} nueva${add>1?'s':''}`, rem&&`−${rem} quitada${rem>1?'s':''}`].filter(Boolean).join(' · ') + ' sin guardar' : '';
+}
+
+// --- Ventanas en las que hubo plaza libre, a partir de los eventos
+function availabilityWindows(ds){
+  const bySvc = {};
+  for (const e of (ds.events||[])) (bySvc[e.svc] ??= []).push(e);
+  const out = [];
+  for (const [svc, evs] of Object.entries(bySvc)){
+    evs.sort((a,b)=>a.at.localeCompare(b.at));
+    let open=null;
+    for (const e of evs){
+      if (e.to==='V' && !open) open={svc, time:e.time, from:e.at, nuevo:e.from==='absent'};
+      else if (e.from==='V' && open){ open.to=e.at; out.push(open); open=null; }
+    }
+    if (open) out.push(open);
+  }
+  return out.sort((a,b)=>b.from.localeCompare(a.from));
+}
+
+function renderList(){
+  const list=$('#list'); list.innerHTML='';
+  const dates=[...(config?.dates||[])].filter(d=>d>=todayIso).sort();
+  if (!dates.length){ list.innerHTML='<div class="empty">Toca días en el calendario y guarda para empezar a vigilar.</div>'; return; }
+  for (const d of dates){
+    const ds = state.dates?.[d], st=dayStatus(d);
+    const el=document.createElement('div'); el.className='date-item';
+    let html = `<div class="date-top"><div><div class="date-title">${fmtDate(d)}</div>
+      <div class="status-line">${ds?.lastCheck?`Comprobado ${ago(ds.lastCheck)}`:'Pendiente de la primera comprobación'}</div></div>
+      <span class="pill ${st}">${LABEL[st]}</span></div>`;
+    if (ds){
+      const svcs = Object.entries(ds.services||{}).sort((a,b)=>a[1].time.localeCompare(b[1].time));
+      const win = svcs.filter(([,s])=>inWindow(s.time)), rest = svcs.filter(([,s])=>!inWindow(s.time));
+      const row = ([id,s]) => `<div class="svc"><i class="dot ${s.state}"></i><span class="t">${s.time} → ${s.arrival}</span>
+        <span class="s">${LABEL[s.state]}${s.state!=='absent'&&s.since?` desde ${fmtTs(s.since)}`:''}</span>
+        ${id!==(config.mainService||'10088') && inWindow(s.time) ? '<span class="tag">refuerzo</span>':''}</div>`;
+      html += `<div class="services">${win.length?win.map(row).join(''):'<div class="svc s">Ningún bus en la franja aparece en ALSA (aún no a la venta o completo y oculto).</div>'}</div>`;
+      const wins = availabilityWindows(ds);
+      if (wins.length){
+        html += `<div class="hist">Momentos con plaza libre:<ul>${wins.map(w=>{
+          const end = w.to ? `hasta ${fmtTs(w.to)} <span class="missed">(${fmtDur(new Date(w.to)-new Date(w.from))})</span>` : '<b>¡sigue libre!</b>';
+          return `<li><span>•</span><span><b>${w.time}</b> desde ${fmtTs(w.from)} ${end}${w.nuevo?' · bus nuevo':''}</span></li>`;
+        }).join('')}</ul></div>`;
+      } else if (ds.initialized){
+        html += `<div class="hist">Aún no se ha liberado ninguna plaza desde que lo vigilo.</div>`;
+      }
+      if (rest.length) html += `<details><summary>Otros buses del día (${rest.length})</summary><div class="services">${rest.map(row).join('')}</div></details>`;
+    }
+    el.innerHTML=html; list.appendChild(el);
+  }
+}
+
+async function loadRunStatus(){
+  try{
+    const j = await gh('/actions/workflows/check.yml/runs?per_page=1');
+    const r = j.workflow_runs?.[0];
+    if (!r){ $('#runStatus').textContent='El vigilante todavía no se ha ejecutado.'; return; }
+    const ok = r.conclusion==='success', running = r.status!=='completed';
+    $('#runStatus').innerHTML = `<i class="dot ${running?'unknown':ok?'V':'F'}"></i>` +
+      (running ? `Comprobando ahora mismo (empezó ${ago(r.run_started_at||r.created_at)})`
+               : `Última comprobación ${ago(r.updated_at)} · ${ok?'todo bien':'<a href="'+r.html_url+'" target="_blank" rel="noopener">falló, ver log</a>'}`);
+  }catch{ $('#runStatus').textContent='No pude consultar las ejecuciones de GitHub.'; }
+}
+
+async function saveConfig(newCfg, msg){
+  if (!getTok()){ $('#settings').hidden=false; toast('Pon tu token de GitHub en Ajustes'); return false; }
+  for (let attempt=0; attempt<2; attempt++){
+    try{
+      const body = {message:msg, content:b64encode(JSON.stringify(newCfg,null,2)+'\n'), sha:configSha, branch:'main'};
+      const r = await gh('/contents/config.json',{method:'PUT',body:JSON.stringify(body)});
+      configSha=r.content.sha; config=newCfg; return true;
+    }catch(e){
+      if (attempt===0 && /409|does not match/.test(e.message)){ configSha=(await readFile('config.json')).sha; continue; }
+      toast('Error guardando: '+e.message); return false;
+    }
+  }
+}
+
+$('#btnSave').onclick = async () => {
+  $('#btnSave').disabled=true;
+  const dates=[...selected].filter(d=>d>=todayIso).sort();
+  if (await saveConfig({...config, dates}, `Fechas vigiladas: ${dates.length}`)){
+    toast('Guardado ✓ Lanzo una comprobación…');
+    $('#sub').textContent = `Salidas entre ${config.window[0]} y ${config.window[1]} · ${dates.length} fecha${dates.length===1?'':'s'}`;
+    renderList(); updatePending(); runNow(true);
+  } else updatePending();
+};
+
+$('#btnSaveSettings').onclick = async () => {
+  try{ localStorage.setItem('ghtok', $('#tok').value.trim()); }catch{}
+  const w=[$('#w0').value,$('#w1').value];
+  if (config && w[0] && w[1] && (w[0]!==config.window?.[0] || w[1]!==config.window?.[1])){
+    if (!(await saveConfig({...config, window:w}, `Franja ${w[0]}-${w[1]}`))) return;
+  }
+  toast('Ajustes guardados'); $('#settings').hidden=true; load();
+};
+
+async function runNow(quiet){
+  if (!getTok()){ $('#settings').hidden=false; toast('Pon tu token de GitHub en Ajustes'); return; }
+  try{
+    await gh('/actions/workflows/check.yml/dispatches',{method:'POST',body:JSON.stringify({ref:'main',inputs:{rounds:'1'}})});
+    if (!quiet) toast('Comprobación lanzada. Recarga en 1–2 minutos.');
+    setTimeout(loadRunStatus, 4000);
+  }catch(e){ toast('No pude lanzarla: '+e.message); }
+}
+
+$('#btnCheck').onclick = () => runNow(false);
+$('#btnReload').onclick = () => { load(); toast('Datos recargados'); };
+$('#btnSettings').onclick = () => { $('#settings').hidden=!$('#settings').hidden; $('#tok').value=getTok(); };
+$('#prev').onclick = () => { viewMonth=new Date(viewMonth.getFullYear(), viewMonth.getMonth()-1, 1); renderCal(); };
+$('#next').onclick = () => { viewMonth=new Date(viewMonth.getFullYear(), viewMonth.getMonth()+1, 1); renderCal(); };
+document.addEventListener('visibilitychange', () => { if (!document.hidden && config) load(); });
+
+if (!getTok()) $('#settings').hidden=false;
+load();
+setInterval(() => { if (!document.hidden) load(); }, 120000);
+</script>
+</body>
+</html>
