@@ -303,7 +303,7 @@ async function loadRunStatus(){
     watcherActive = !!active;
     const last = runs.find(r=>r.status==='completed' && r.conclusion!=='cancelled' && r.conclusion!=='skipped');
     if (active){
-      $('#runStatus').innerHTML = `<i class="dot V"></i>Vigilante activo · comprueba cada 2 min (en marcha desde ${ago(active.run_started_at||active.created_at)})`;
+      $('#runStatus').innerHTML = `<i class="dot V"></i>Vigilante activo: revisa todas tus fechas cada ~3 min` + (state.updated ? ` · último cambio detectado ${ago(state.updated)}` : '');
     } else if (last){
       const ok = last.conclusion==='success';
       $('#runStatus').innerHTML = `<i class="dot ${ok?'unknown':'F'}"></i>Vigilante parado · última ejecución ${ago(last.updated_at)}` +
