@@ -18,6 +18,11 @@ para las fechas elegidas y avisa por Telegram. Dashboard en GitHub Pages para el
 5. Para probar: Actions → **Vigilar buses** → **Run workflow** → marca *test_telegram*. Corre aparte del vigilante, sin cancelarlo.
    Para avisar a varias personas, usa un grupo con el bot y pon su id (negativo) en `TELEGRAM_CHAT_ID`.
 
+## Comandos en Telegram
+En el chat configurado (por ejemplo, el grupo) el bot responde a `/estado`, `/fechas` y `/ayuda`.
+Los atiende el vigilante entre ronda y ronda, así que la respuesta puede tardar hasta un par de minutos.
+No abras `getUpdates` en el navegador mientras el vigilante corre: le quitarías los mensajes.
+
 ## Token para el dashboard
 GitHub → Settings → Developer settings → Fine-grained tokens → nuevo token solo para este repo con
 **Contents: Read and write** y **Actions: Read and write**. Pégalo en ⚙️ Ajustes del dashboard (se guarda solo en tu navegador).

@@ -26,6 +26,10 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/140.0 Safari/537.36")
 
 STATE_LABEL = {"V": "a la venta", "F": "completo", "absent": "no aparece"}
+STATE_ICON = {"V": "🟢", "F": "🔴", "absent": "⚪"}
+DASHBOARD = "https://javiigaar.github.io/vigia-bus-alsa/"
+COMMANDS = {"estado": "Estado de los buses vigilados", "fechas": "Fechas que se vigilan",
+            "ayuda": "Qué puedo hacer"}
 WEEKDAYS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 
 
@@ -109,6 +113,102 @@ def telegram(text):
         }, timeout=20).raise_for_status()
     except requests.RequestException as e:
         print("Error enviando Telegram:", e)
+
+
+def telegram_api(method, http_timeout=20, **params):
+    token = os.environ.get("TELEGRAM_TOKEN")
+    if not token:
+        return None
+    try:
+        r = requests.post(f"https://api.telegram.org/bot{token}/{method}", json=params,
+                          timeout=http_timeout)
+        r.raise_for_status()
+        return r.json().get("result")
+    except requests.RequestException as e:
+        print(f"Error en Telegram ({method}):", e)
+        return None
+
+
+def upcoming_dates(config):
+    today = datetime.now(TZ).date()
+    return [date.fromisoformat(iso) for iso in sorted(config.get("dates", []))
+            if date.fromisoformat(iso) >= today]
+
+
+def fmt_time(iso):
+    return datetime.fromisoformat(iso).astimezone(TZ).strftime("%d/%m %H:%M")
+
+
+def reply_estado(config, state):
+    window = config.get("window", ["17:45", "18:45"])
+    lines = [f"🚌 <b>Burgos → Valladolid</b> ({window[0]}–{window[1]})", ""]
+    not_on_sale = []  # ALSA aún no vende billetes para ese día: se agrupan al final
+    for day in upcoming_dates(config):
+        ds = state.get("dates", {}).get(day.isoformat())
+        if not ds:
+            lines.append(f"<b>{fmt_day(day)}</b>: sin comprobar aún")
+            continue
+        if not ds["services"]:
+            not_on_sale.append(fmt_day(day))
+            continue
+        # Dos códigos de servicio pueden ser el mismo bus a la misma hora: se cuentan una vez
+        svcs = sorted({(v["time"], v["state"]) for v in ds["services"].values()
+                       if in_window(v["time"], window)})
+        desc = ", ".join(f"{STATE_ICON[st]} {t} {STATE_LABEL[st]}" for t, st in svcs) \
+            or "⚪ no hay bus en la franja"
+        lines.append(f"<b>{fmt_day(day)}</b>: {desc}")
+    if not_on_sale:
+        lines += ["", "⏳ Aún sin billetes en ALSA: " + ", ".join(not_on_sale)]
+    if not upcoming_dates(config):
+        lines.append("No hay fechas vigiladas.")
+    if state.get("updated"):
+        lines += ["", f"Último cambio: {fmt_time(state['updated'])}"]
+    lines.append(f"📊 {DASHBOARD}")
+    return "\n".join(lines)
+
+
+def reply_fechas(config):
+    days = upcoming_dates(config)
+    if not days:
+        return "No hay fechas vigiladas."
+    return f"📅 <b>{len(days)} fechas vigiladas</b>\n" + ", ".join(fmt_day(d) for d in days)
+
+
+def reply_ayuda():
+    return ("🤖 <b>Vigía bus</b>\n" + "\n".join(f"/{c} — {d}" for c, d in COMMANDS.items())
+            + "\n\nLos avisos de plazas libres llegan solos.")
+
+
+def listen(seconds, config, state, offset):
+    """Atiende comandos del chat configurado durante `seconds` (long polling). Devuelve el offset."""
+    chat = os.environ.get("TELEGRAM_CHAT_ID")
+    end = time.monotonic() + seconds
+    if not os.environ.get("TELEGRAM_TOKEN") or not chat:
+        time.sleep(seconds)
+        return offset
+    while (left := end - time.monotonic()) > 1:
+        wait = int(min(left, 50))
+        updates = telegram_api("getUpdates", http_timeout=wait + 10, offset=offset,
+                               timeout=wait, allowed_updates=["message"])
+        if updates is None:
+            time.sleep(min(10, max(0, end - time.monotonic())))
+            continue
+        for u in updates:
+            offset = u["update_id"] + 1
+            msg = u.get("message") or {}
+            text = (msg.get("text") or "").strip()
+            # Solo el chat configurado, solo comandos, y nada de mensajes viejos (>15 min)
+            if (str(msg.get("chat", {}).get("id")) != str(chat) or not text.startswith("/")
+                    or time.time() - msg.get("date", 0) > 900):
+                continue
+            cmd = text.split()[0][1:].split("@")[0].lower()
+            if cmd == "estado":
+                telegram(reply_estado(config, state))
+            elif cmd == "fechas":
+                telegram(reply_fechas(config))
+            elif cmd in ("ayuda", "help", "start"):
+                telegram(reply_ayuda())
+    return offset
 
 
 def in_window(t, window):
@@ -230,6 +330,10 @@ def main():
     in_ci = os.environ.get("GITHUB_ACTIONS") == "true"
     deadline = time.monotonic() + max_minutes * 60
     alsa = Alsa()
+    offset = None
+    if max_minutes:
+        telegram_api("setMyCommands",
+                     commands=[{"command": c, "description": d} for c, d in COMMANDS.items()])
 
     i = 0
     while True:
@@ -246,7 +350,7 @@ def main():
         more = time.monotonic() + gap < deadline if max_minutes else i < rounds
         if not more:
             break
-        time.sleep(gap)
+        offset = listen(gap, config, state, offset)
 
 if __name__ == "__main__":
     sys.exit(main())
