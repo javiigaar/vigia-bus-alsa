@@ -60,9 +60,9 @@
         "5761": {
           "time": "17:20",
           "arrival": "19:25",
-          "state": "F",
+          "state": "V",
           "price": 15.15,
-          "since": "2026-10-15T11:59:17+02:00",
+          "since": "2026-10-16T21:36:35+02:00",
           "firstSeen": "2026-10-15T11:59:17+02:00"
         },
         "10068": {
@@ -75,7 +75,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-16T20:24:42+02:00",
+      "lastCheck": "2026-10-16T21:36:35+02:00",
       "initialized": true
     },
     "2026-11-01": {
@@ -152,7 +152,7 @@
           "to": "V"
         }
       ],
-      "lastCheck": "2026-10-16T20:24:49+02:00",
+      "lastCheck": "2026-10-16T21:36:42+02:00",
       "initialized": true
     },
     "2026-11-15": {
@@ -167,7 +167,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-16T20:24:52+02:00",
+      "lastCheck": "2026-10-16T21:36:44+02:00",
       "initialized": true
     },
     "2026-11-22": {
@@ -182,7 +182,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-16T20:24:54+02:00",
+      "lastCheck": "2026-10-16T21:36:46+02:00",
       "initialized": true
     },
     "2026-11-29": {
@@ -197,7 +197,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-16T20:24:56+02:00",
+      "lastCheck": "2026-10-16T21:36:49+02:00",
       "initialized": true
     },
     "2026-12-06": {
@@ -251,7 +251,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-16T20:25:00+02:00",
+      "lastCheck": "2026-10-16T21:36:53+02:00",
       "initialized": true
     },
     "2026-12-20": {
@@ -266,7 +266,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-16T20:25:02+02:00",
+      "lastCheck": "2026-10-16T21:36:56+02:00",
       "initialized": true
     },
     "2027-01-10": {
@@ -278,97 +278,97 @@
     "2027-01-17": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:07+02:00",
+      "lastCheck": "2026-10-16T21:37:00+02:00",
       "initialized": true
     },
     "2027-01-31": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:11+02:00",
+      "lastCheck": "2026-10-16T21:37:04+02:00",
       "initialized": true
     },
     "2027-01-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:05+02:00",
+      "lastCheck": "2026-10-16T21:36:58+02:00",
       "initialized": true
     },
     "2027-01-24": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:09+02:00",
+      "lastCheck": "2026-10-16T21:37:02+02:00",
       "initialized": true
     },
     "2027-02-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:13+02:00",
+      "lastCheck": "2026-10-16T21:37:07+02:00",
       "initialized": true
     },
     "2027-02-14": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:16+02:00",
+      "lastCheck": "2026-10-16T21:37:09+02:00",
       "initialized": true
     },
     "2027-02-21": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:18+02:00",
+      "lastCheck": "2026-10-16T21:37:11+02:00",
       "initialized": true
     },
     "2027-02-28": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:20+02:00",
+      "lastCheck": "2026-10-16T21:37:13+02:00",
       "initialized": true
     },
     "2027-03-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:22+02:00",
+      "lastCheck": "2026-10-16T21:37:16+02:00",
       "initialized": true
     },
     "2027-03-14": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:24+02:00",
+      "lastCheck": "2026-10-16T21:37:18+02:00",
       "initialized": true
     },
     "2027-03-21": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:26+02:00",
+      "lastCheck": "2026-10-16T21:37:20+02:00",
       "initialized": true
     },
     "2027-03-28": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:29+02:00",
+      "lastCheck": "2026-10-16T21:37:22+02:00",
       "initialized": true
     },
     "2027-04-04": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:31+02:00",
+      "lastCheck": "2026-10-16T21:37:24+02:00",
       "initialized": true
     },
     "2027-04-11": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:33+02:00",
+      "lastCheck": "2026-10-16T21:37:27+02:00",
       "initialized": true
     },
     "2027-04-18": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:35+02:00",
+      "lastCheck": "2026-10-16T21:37:29+02:00",
       "initialized": true
     },
     "2027-04-25": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-16T20:25:37+02:00",
+      "lastCheck": "2026-10-16T21:37:31+02:00",
       "initialized": true
     },
     "2026-11-02": {
@@ -406,7 +406,7 @@
           "to": "F"
         }
       ],
-      "lastCheck": "2026-10-16T20:24:47+02:00",
+      "lastCheck": "2026-10-16T21:36:39+02:00",
       "initialized": true
     },
     "2026-10-25": {
@@ -445,7 +445,7 @@
           "to": "V"
         }
       ],
-      "lastCheck": "2026-10-16T20:24:44+02:00",
+      "lastCheck": "2026-10-16T21:36:37+02:00",
       "initialized": true
     },
     "2026-12-08": {
@@ -460,9 +460,9 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-16T20:24:58+02:00",
+      "lastCheck": "2026-10-16T21:36:51+02:00",
       "initialized": true
     }
   },
-  "updated": "2026-10-16T20:25:39+02:00"
+  "updated": "2026-10-16T21:37:32+02:00"
 }
