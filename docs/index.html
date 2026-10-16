@@ -297,9 +297,13 @@ function renderList(){
 let watcherActive = false;
 async function loadRunStatus(){
   try{
-    const j = await gh('/actions/workflows/check.yml/runs?per_page=10');
+    // El activo se pide aparte: las ejecuciones en cola canceladas lo sacan rápido de las últimas N.
+    const [j, ja] = await Promise.all([
+      gh('/actions/workflows/check.yml/runs?per_page=30'),
+      gh('/actions/workflows/check.yml/runs?status=in_progress&per_page=1'),
+    ]);
     const runs = j.workflow_runs||[];
-    const active = runs.find(r=>r.status==='in_progress');
+    const active = (ja.workflow_runs||[])[0];
     watcherActive = !!active;
     const last = runs.find(r=>r.status==='completed' && r.conclusion!=='cancelled' && r.conclusion!=='skipped');
     if (active){
