@@ -15,6 +15,8 @@ para las fechas elegidas y avisa por Telegram. Dashboard en GitHub Pages para el
 2. Escribe cualquier cosa a tu bot nuevo.
 3. Abre `https://api.telegram.org/bot<TOKEN>/getUpdates` y copia `chat.id`.
 4. En GitHub → Settings → Secrets and variables → Actions: crea `TELEGRAM_TOKEN` y `TELEGRAM_CHAT_ID`.
+5. Para probar: Actions → **Vigilar buses** → **Run workflow** → marca *test_telegram*. Corre aparte del vigilante, sin cancelarlo.
+   Para avisar a varias personas, usa un grupo con el bot y pon su id (negativo) en `TELEGRAM_CHAT_ID`.
 
 ## Token para el dashboard
 GitHub → Settings → Developer settings → Fine-grained tokens → nuevo token solo para este repo con

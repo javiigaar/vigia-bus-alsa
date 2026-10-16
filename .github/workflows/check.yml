@@ -25,7 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 355
     concurrency:
-      group: vigilar
+      # El mensaje de prueba va en su propio grupo para no esperar (ni echar de la cola) al vigilante
+      group: ${{ github.event.inputs.test_telegram == 'true' && 'test-telegram' || 'vigilar' }}
       cancel-in-progress: false
     env:
       GH_TOKEN: ${{ github.token }}
