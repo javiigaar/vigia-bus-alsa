@@ -26,10 +26,8 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/140.0 Safari/537.36")
 
 STATE_LABEL = {"V": "a la venta", "F": "completo", "absent": "no aparece"}
-STATE_ICON = {"V": "🟢", "F": "🔴", "absent": "⚪"}
 DASHBOARD = "https://javiigaar.github.io/vigia-bus-alsa/"
-COMMANDS = {"estado": "Estado de los buses vigilados", "fechas": "Fechas que se vigilan",
-            "ayuda": "Qué puedo hacer"}
+COMMANDS = {"estado": "Calendario con el estado de los buses", "fechas": "Fechas que se vigilan"}
 WEEKDAYS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 
 
@@ -139,32 +137,50 @@ def fmt_time(iso):
     return datetime.fromisoformat(iso).astimezone(TZ).strftime("%d/%m %H:%M")
 
 
-def reply_estado(config, state):
+def date_statuses(config, state):
+    """Resume cada fecha vigilada (ya comprobada) en "V", "F", "none" (sin bus en la franja)
+    o "nosale" (ALSA aún no vende billetes ese día)."""
     window = config.get("window", ["17:45", "18:45"])
-    lines = [f"🚌 <b>Burgos → Valladolid</b> ({window[0]}–{window[1]})", ""]
-    not_on_sale = []  # ALSA aún no vende billetes para ese día: se agrupan al final
+    out = {}
     for day in upcoming_dates(config):
         ds = state.get("dates", {}).get(day.isoformat())
         if not ds:
-            lines.append(f"<b>{fmt_day(day)}</b>: sin comprobar aún")
             continue
-        if not ds["services"]:
-            not_on_sale.append(fmt_day(day))
-            continue
-        # Dos códigos de servicio pueden ser el mismo bus a la misma hora: se cuentan una vez
-        svcs = sorted({(v["time"], v["state"]) for v in ds["services"].values()
-                       if in_window(v["time"], window)})
-        desc = ", ".join(f"{STATE_ICON[st]} {t} {STATE_LABEL[st]}" for t, st in svcs) \
-            or "⚪ no hay bus en la franja"
-        lines.append(f"<b>{fmt_day(day)}</b>: {desc}")
-    if not_on_sale:
-        lines += ["", "⏳ Aún sin billetes en ALSA: " + ", ".join(not_on_sale)]
-    if not upcoming_dates(config):
-        lines.append("No hay fechas vigiladas.")
-    if state.get("updated"):
-        lines += ["", f"Último cambio: {fmt_time(state['updated'])}"]
-    lines.append(f"📊 {DASHBOARD}")
-    return "\n".join(lines)
+        states = {v["state"] for v in ds["services"].values() if in_window(v["time"], window)}
+        out[day] = ("nosale" if not ds["services"] else "V" if "V" in states
+                    else "F" if "F" in states else "none")
+    return out
+
+
+def send_estado(config, state):
+    statuses = date_statuses(config, state)
+    if not statuses:
+        telegram("No hay fechas vigiladas.")
+        return
+    libres = [fmt_day(d) for d, st in statuses.items() if st == "V"]
+    llenos = [fmt_day(d) for d, st in statuses.items() if st == "F"]
+    caption = "\n".join(filter(None, [
+        "🚌 <b>Bus de las 18:00 Burgos → Valladolid</b>",
+        libres and "🟢 Con plaza: " + ", ".join(libres),
+        llenos and "🔴 Completo: " + ", ".join(llenos),
+    ]))
+    updated = fmt_time(state["updated"]) if state.get("updated") else None
+    try:
+        import calendario  # Pillow solo hace falta para esto
+        png = calendario.render(statuses, datetime.now(TZ).date(), updated)
+    except Exception as e:  # noqa: BLE001 - si falla la imagen, al menos que llegue el texto
+        print("Error dibujando el calendario:", e)
+        telegram(caption + f"\n\n📊 {DASHBOARD}")
+        return
+    token, chat = os.environ.get("TELEGRAM_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
+    try:
+        requests.post(f"https://api.telegram.org/bot{token}/sendPhoto", data={
+            "chat_id": chat, "caption": caption, "parse_mode": "HTML",
+            "reply_markup": json.dumps({"inline_keyboard": [[
+                {"text": "📊 Abrir panel", "url": DASHBOARD}]]}),
+        }, files={"photo": ("estado.png", png, "image/png")}, timeout=30).raise_for_status()
+    except requests.RequestException as e:
+        print("Error enviando el calendario:", e)
 
 
 def reply_fechas(config):
@@ -172,11 +188,6 @@ def reply_fechas(config):
     if not days:
         return "No hay fechas vigiladas."
     return f"📅 <b>{len(days)} fechas vigiladas</b>\n" + ", ".join(fmt_day(d) for d in days)
-
-
-def reply_ayuda():
-    return ("🤖 <b>Vigía bus</b>\n" + "\n".join(f"/{c} — {d}" for c, d in COMMANDS.items())
-            + "\n\nLos avisos de plazas libres llegan solos.")
 
 
 def listen(seconds, config, state, offset):
@@ -203,11 +214,9 @@ def listen(seconds, config, state, offset):
                 continue
             cmd = text.split()[0][1:].split("@")[0].lower()
             if cmd == "estado":
-                telegram(reply_estado(config, state))
+                send_estado(config, state)
             elif cmd == "fechas":
                 telegram(reply_fechas(config))
-            elif cmd in ("ayuda", "help", "start"):
-                telegram(reply_ayuda())
     return offset
 
 

@@ -19,7 +19,8 @@ para las fechas elegidas y avisa por Telegram. Dashboard en GitHub Pages para el
    Para avisar a varias personas, usa un grupo con el bot y pon su id (negativo) en `TELEGRAM_CHAT_ID`.
 
 ## Comandos en Telegram
-En el chat configurado (por ejemplo, el grupo) el bot responde a `/estado`, `/fechas` y `/ayuda`.
+En el chat configurado (por ejemplo, el grupo) el bot responde a `/estado` (imagen de calendario con
+el estado de cada fecha y botón al dashboard) y `/fechas`. Vista previa local del calendario: `python calendario.py`.
 Los atiende el vigilante entre ronda y ronda, así que la respuesta puede tardar hasta un par de minutos.
 No abras `getUpdates` en el navegador mientras el vigilante corre: le quitarías los mensajes.
 
