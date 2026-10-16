@@ -26,7 +26,6 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/140.0 Safari/537.36")
 
 STATE_LABEL = {"V": "a la venta", "F": "completo", "absent": "no aparece"}
-DASHBOARD = "https://javiigaar.github.io/vigia-bus-alsa/"
 COMMANDS = {"estado": "Calendario con el estado de los buses", "fechas": "Fechas que se vigilan"}
 WEEKDAYS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 
@@ -170,14 +169,12 @@ def send_estado(config, state):
         png = calendario.render(statuses, datetime.now(TZ).date(), updated)
     except Exception as e:  # noqa: BLE001 - si falla la imagen, al menos que llegue el texto
         print("Error dibujando el calendario:", e)
-        telegram(caption + f"\n\n📊 {DASHBOARD}")
+        telegram(caption)
         return
     token, chat = os.environ.get("TELEGRAM_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
     try:
         requests.post(f"https://api.telegram.org/bot{token}/sendPhoto", data={
             "chat_id": chat, "caption": caption, "parse_mode": "HTML",
-            "reply_markup": json.dumps({"inline_keyboard": [[
-                {"text": "📊 Abrir panel", "url": DASHBOARD}]]}),
         }, files={"photo": ("estado.png", png, "image/png")}, timeout=30).raise_for_status()
     except requests.RequestException as e:
         print("Error enviando el calendario:", e)

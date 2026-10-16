@@ -20,7 +20,7 @@ para las fechas elegidas y avisa por Telegram. Dashboard en GitHub Pages para el
 
 ## Comandos en Telegram
 En el chat configurado (por ejemplo, el grupo) el bot responde a `/estado` (imagen de calendario con
-el estado de cada fecha y botón al dashboard) y `/fechas`. Vista previa local del calendario: `python calendario.py`.
+el estado de cada fecha) y `/fechas`. Vista previa local del calendario: `python calendario.py`.
 Los atiende el vigilante entre ronda y ronda, así que la respuesta puede tardar hasta un par de minutos.
 No abras `getUpdates` en el navegador mientras el vigilante corre: le quitarías los mensajes.
 
