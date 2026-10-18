@@ -75,7 +75,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T11:09:44+02:00",
+      "lastCheck": "2026-10-18T11:24:39+02:00",
       "initialized": true
     },
     "2026-11-01": {
@@ -187,7 +187,7 @@
           "to": "V"
         }
       ],
-      "lastCheck": "2026-10-18T11:09:51+02:00",
+      "lastCheck": "2026-10-18T11:24:46+02:00",
       "initialized": true
     },
     "2026-11-15": {
@@ -218,7 +218,7 @@
           "to": "V"
         }
       ],
-      "lastCheck": "2026-10-18T11:09:53+02:00",
+      "lastCheck": "2026-10-18T11:24:48+02:00",
       "initialized": true
     },
     "2026-11-22": {
@@ -233,7 +233,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T11:09:55+02:00",
+      "lastCheck": "2026-10-18T11:24:50+02:00",
       "initialized": true
     },
     "2026-11-29": {
@@ -248,7 +248,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T11:09:57+02:00",
+      "lastCheck": "2026-10-18T11:24:52+02:00",
       "initialized": true
     },
     "2026-12-06": {
@@ -302,7 +302,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T11:10:02+02:00",
+      "lastCheck": "2026-10-18T11:24:57+02:00",
       "initialized": true
     },
     "2026-12-20": {
@@ -317,7 +317,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T11:10:04+02:00",
+      "lastCheck": "2026-10-18T11:24:59+02:00",
       "initialized": true
     },
     "2027-01-10": {
@@ -329,97 +329,97 @@
     "2027-01-17": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:08+02:00",
+      "lastCheck": "2026-10-18T11:25:03+02:00",
       "initialized": true
     },
     "2027-01-31": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:13+02:00",
+      "lastCheck": "2026-10-18T11:25:08+02:00",
       "initialized": true
     },
     "2027-01-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:06+02:00",
+      "lastCheck": "2026-10-18T11:25:01+02:00",
       "initialized": true
     },
     "2027-01-24": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:11+02:00",
+      "lastCheck": "2026-10-18T11:25:05+02:00",
       "initialized": true
     },
     "2027-02-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:15+02:00",
+      "lastCheck": "2026-10-18T11:25:10+02:00",
       "initialized": true
     },
     "2027-02-14": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:17+02:00",
+      "lastCheck": "2026-10-18T11:25:12+02:00",
       "initialized": true
     },
     "2027-02-21": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:19+02:00",
+      "lastCheck": "2026-10-18T11:25:14+02:00",
       "initialized": true
     },
     "2027-02-28": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:22+02:00",
+      "lastCheck": "2026-10-18T11:25:17+02:00",
       "initialized": true
     },
     "2027-03-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:24+02:00",
+      "lastCheck": "2026-10-18T11:25:19+02:00",
       "initialized": true
     },
     "2027-03-14": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:26+02:00",
+      "lastCheck": "2026-10-18T11:25:21+02:00",
       "initialized": true
     },
     "2027-03-21": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:28+02:00",
+      "lastCheck": "2026-10-18T11:25:23+02:00",
       "initialized": true
     },
     "2027-03-28": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:30+02:00",
+      "lastCheck": "2026-10-18T11:25:25+02:00",
       "initialized": true
     },
     "2027-04-04": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:33+02:00",
+      "lastCheck": "2026-10-18T11:25:27+02:00",
       "initialized": true
     },
     "2027-04-11": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:35+02:00",
+      "lastCheck": "2026-10-18T11:25:30+02:00",
       "initialized": true
     },
     "2027-04-18": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:37+02:00",
+      "lastCheck": "2026-10-18T11:25:32+02:00",
       "initialized": true
     },
     "2027-04-25": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T11:10:39+02:00",
+      "lastCheck": "2026-10-18T11:25:37+02:00",
       "initialized": true
     },
     "2026-11-02": {
@@ -457,7 +457,7 @@
           "to": "F"
         }
       ],
-      "lastCheck": "2026-10-18T11:09:48+02:00",
+      "lastCheck": "2026-10-18T11:24:43+02:00",
       "initialized": true
     },
     "2026-10-25": {
@@ -503,7 +503,7 @@
           "to": "F"
         }
       ],
-      "lastCheck": "2026-10-18T11:09:46+02:00",
+      "lastCheck": "2026-10-18T11:24:41+02:00",
       "initialized": true
     },
     "2026-12-08": {
@@ -511,16 +511,16 @@
         "5761": {
           "time": "17:20",
           "arrival": "19:25",
-          "state": "V",
+          "state": "F",
           "price": 15.15,
-          "since": "2026-10-18T11:09:59+02:00",
+          "since": "2026-10-18T11:24:54+02:00",
           "firstSeen": "2026-10-15T12:24:54+02:00"
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T11:09:59+02:00",
+      "lastCheck": "2026-10-18T11:24:54+02:00",
       "initialized": true
     }
   },
-  "updated": "2026-10-18T11:10:41+02:00"
+  "updated": "2026-10-18T11:25:38+02:00"
 }
