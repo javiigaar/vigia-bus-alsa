@@ -75,7 +75,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T09:25:47+02:00",
+      "lastCheck": "2026-10-18T11:06:39+02:00",
       "initialized": true
     },
     "2026-11-01": {
@@ -187,7 +187,7 @@
           "to": "V"
         }
       ],
-      "lastCheck": "2026-10-18T09:25:53+02:00",
+      "lastCheck": "2026-10-18T11:06:45+02:00",
       "initialized": true
     },
     "2026-11-15": {
@@ -199,10 +199,26 @@
           "price": 15.15,
           "since": "2026-10-15T11:59:23+02:00",
           "firstSeen": "2026-10-15T11:59:23+02:00"
+        },
+        "4179": {
+          "time": "18:00",
+          "arrival": "19:30",
+          "state": "V",
+          "price": 15.15,
+          "since": "2026-10-18T11:06:48+02:00",
+          "firstSeen": "2026-10-18T11:06:48+02:00"
         }
       },
-      "events": [],
-      "lastCheck": "2026-10-18T09:25:56+02:00",
+      "events": [
+        {
+          "at": "2026-10-18T11:06:48+02:00",
+          "svc": "4179",
+          "time": "18:00",
+          "from": "absent",
+          "to": "V"
+        }
+      ],
+      "lastCheck": "2026-10-18T11:06:48+02:00",
       "initialized": true
     },
     "2026-11-22": {
@@ -217,7 +233,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T09:25:58+02:00",
+      "lastCheck": "2026-10-18T11:06:50+02:00",
       "initialized": true
     },
     "2026-11-29": {
@@ -232,7 +248,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T09:26:00+02:00",
+      "lastCheck": "2026-10-18T11:06:52+02:00",
       "initialized": true
     },
     "2026-12-06": {
@@ -286,7 +302,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T09:26:04+02:00",
+      "lastCheck": "2026-10-18T11:06:57+02:00",
       "initialized": true
     },
     "2026-12-20": {
@@ -301,7 +317,7 @@
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T09:26:06+02:00",
+      "lastCheck": "2026-10-18T11:07:00+02:00",
       "initialized": true
     },
     "2027-01-10": {
@@ -313,97 +329,97 @@
     "2027-01-17": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:11+02:00",
+      "lastCheck": "2026-10-18T11:07:04+02:00",
       "initialized": true
     },
     "2027-01-31": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:15+02:00",
+      "lastCheck": "2026-10-18T11:07:09+02:00",
       "initialized": true
     },
     "2027-01-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:09+02:00",
+      "lastCheck": "2026-10-18T11:07:02+02:00",
       "initialized": true
     },
     "2027-01-24": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:13+02:00",
+      "lastCheck": "2026-10-18T11:07:07+02:00",
       "initialized": true
     },
     "2027-02-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:17+02:00",
+      "lastCheck": "2026-10-18T11:07:11+02:00",
       "initialized": true
     },
     "2027-02-14": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:19+02:00",
+      "lastCheck": "2026-10-18T11:07:13+02:00",
       "initialized": true
     },
     "2027-02-21": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:22+02:00",
+      "lastCheck": "2026-10-18T11:07:15+02:00",
       "initialized": true
     },
     "2027-02-28": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:24+02:00",
+      "lastCheck": "2026-10-18T11:07:18+02:00",
       "initialized": true
     },
     "2027-03-07": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:26+02:00",
+      "lastCheck": "2026-10-18T11:07:20+02:00",
       "initialized": true
     },
     "2027-03-14": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:28+02:00",
+      "lastCheck": "2026-10-18T11:07:22+02:00",
       "initialized": true
     },
     "2027-03-21": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:30+02:00",
+      "lastCheck": "2026-10-18T11:07:25+02:00",
       "initialized": true
     },
     "2027-03-28": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:33+02:00",
+      "lastCheck": "2026-10-18T11:07:30+02:00",
       "initialized": true
     },
     "2027-04-04": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:35+02:00",
+      "lastCheck": "2026-10-18T11:07:32+02:00",
       "initialized": true
     },
     "2027-04-11": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:37+02:00",
+      "lastCheck": "2026-10-18T11:07:35+02:00",
       "initialized": true
     },
     "2027-04-18": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:39+02:00",
+      "lastCheck": "2026-10-18T11:07:37+02:00",
       "initialized": true
     },
     "2027-04-25": {
       "services": {},
       "events": [],
-      "lastCheck": "2026-10-18T09:26:41+02:00",
+      "lastCheck": "2026-10-18T11:07:39+02:00",
       "initialized": true
     },
     "2026-11-02": {
@@ -441,7 +457,7 @@
           "to": "F"
         }
       ],
-      "lastCheck": "2026-10-18T09:25:51+02:00",
+      "lastCheck": "2026-10-18T11:06:43+02:00",
       "initialized": true
     },
     "2026-10-25": {
@@ -487,7 +503,7 @@
           "to": "F"
         }
       ],
-      "lastCheck": "2026-10-18T09:25:49+02:00",
+      "lastCheck": "2026-10-18T11:06:41+02:00",
       "initialized": true
     },
     "2026-12-08": {
@@ -495,16 +511,16 @@
         "5761": {
           "time": "17:20",
           "arrival": "19:25",
-          "state": "V",
+          "state": "F",
           "price": 15.15,
-          "since": "2026-10-15T12:24:54+02:00",
+          "since": "2026-10-18T11:06:55+02:00",
           "firstSeen": "2026-10-15T12:24:54+02:00"
         }
       },
       "events": [],
-      "lastCheck": "2026-10-18T09:26:02+02:00",
+      "lastCheck": "2026-10-18T11:06:55+02:00",
       "initialized": true
     }
   },
-  "updated": "2026-10-18T09:26:43+02:00"
+  "updated": "2026-10-18T11:07:41+02:00"
 }
